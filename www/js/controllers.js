@@ -202,7 +202,7 @@ angular.module('ionicParseApp.controllers', [])
 		queryThatPic.find({
 			success: function (EachPic) {
 			  //alert(friend.id)
-			  //console.dir(EachPic[0].attributes)
+			  console.dir(EachPic[0].attributes)
 			  $scope.PicArray = EachPic[0].attributes.image64;
 	      //console.dir($scope.love.length)
 	      //console.dir($scope.lengthofPicArray)
