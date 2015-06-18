@@ -5,7 +5,7 @@ angular.module('ionicParseApp.controllers', [])
 		$ionicHistory.clearHistory();
 		$ionicHistory.clearCache();
 	}
-
+	
 	$scope.logout = function() {
 		Parse.User.logOut();
 		$rootScope.user = null;
@@ -22,77 +22,77 @@ angular.module('ionicParseApp.controllers', [])
 		$ionicHistory.clearHistory();
 		$ionicHistory.clearCache();
 	}
-
+	
 	$scope.login = function() {
 		$state.go('app.login');
 	};
-
+	
 	$scope.signUp = function() {
 		$state.go('app.register');
 	};
-
+	
 	if ($rootScope.isLoggedIn) {
 		$state.go('app.home');
 	}
 })
 
 .controller('CreaterController', function($scope, $state, $rootScope, $cordovaCamera, $ionicHistory ) {
-  $scope.userscontrib = [];
-  $scope.imageArray = [];
-  $scope.imgURI = undefined;
-  if ($rootScope.isLoggedIn) {
-  	$scope.takePicture = function() {
-  		var options = {
+	$scope.userscontrib = [];
+	$scope.imageArray = [];
+	$scope.imgURI = undefined;
+	if ($rootScope.isLoggedIn) {
+		$scope.takePicture = function() {
+			var options = {
 				quality: 75,
-	      destinationType: Camera.DestinationType.DATA_URL,
-	      sourceType: Camera.PictureSourceType.CAMERA,
-	      allowEdit: false,
-	      encodingType: Camera.EncodingType.JPEG,
-	      targetWidth: 300,
-	      targetHeight: 300,
-	      popoverOptions: CameraPopoverOptions,
-	      saveToPhotoAlbum: false
-	  		};
-
-  		$cordovaCamera.getPicture(options).then(function(imageData) {
-  			$scope.imgURI = "data:image/jpeg;base64," + imageData;
-  			//do other stuff
-  		}, function(err) {
-  			// An error occured. Show a message to the user
-  		});
-  	}
-  	$scope.userscontrib.push(Parse.User.current().get('username'));
-  	var teststuff = $scope.userscontrib;
-  	//console.dir(teststuff.length);
-  	//console.dir($scope.userscontrib)
-  	$scope.sendData = function(){
-        $scope.imageArray.push($scope.imgURI)
-    	  var Picture = Parse.Object.extend("Picture");
-    	  var picture = new Picture();
-    	  picture.set("name", $scope.user.nameOfChain)
-    	  picture.set("currenchaincount", 1)
-    	  picture.set("username", Parse.User.current())
-    	  picture.set("image64", $scope.imageArray)
-    	  picture.set("chain", $scope.user.chainLength)
-    	  picture.set("nextuser", $scope.user.usertosendto)
-    	  picture.set("UsersContributed", teststuff)
-    	  picture.save(null, {
-      		success: function(picture) {
-      		  console.dir('it works')
-      		},
-      		error: function(picture, error) {
-      		  console.dir('you suck ass')
-      		}
-    	  });
-      	$scope.imgURI = undefined;
-      	$ionicHistory.nextViewOptions({
-      		disableBack: true
-      	});
-      	$state.go('app.home', {
-      		clear: true
-      	});
-      }
-  }
+				destinationType: Camera.DestinationType.DATA_URL,
+				sourceType: Camera.PictureSourceType.CAMERA,
+				allowEdit: false,
+				encodingType: Camera.EncodingType.JPEG,
+				targetWidth: 300,
+				targetHeight: 300,
+				popoverOptions: CameraPopoverOptions,
+				saveToPhotoAlbum: false
+			};
+			
+			$cordovaCamera.getPicture(options).then(function(imageData) {
+				$scope.imgURI = "data:image/jpeg;base64," + imageData;
+				//do other stuff
+				}, function(err) {
+				// An error occured. Show a message to the user
+			});
+		}
+		$scope.userscontrib.push(Parse.User.current().get('username'));
+		var teststuff = $scope.userscontrib;
+		//console.dir(teststuff.length);
+		//console.dir($scope.userscontrib)
+		$scope.sendData = function(){
+			$scope.imageArray.push($scope.imgURI)
+			var Picture = Parse.Object.extend("Picture");
+			var picture = new Picture();
+			picture.set("name", $scope.user.nameOfChain)
+			picture.set("currenchaincount", 1)
+			picture.set("username", Parse.User.current())
+			picture.set("image64", $scope.imageArray)
+			picture.set("chain", $scope.user.chainLength)
+			picture.set("nextuser", $scope.user.usertosendto)
+			picture.set("UsersContributed", teststuff)
+			picture.save(null, {
+				success: function(picture) {
+					console.dir('it works')
+				},
+				error: function(picture, error) {
+					console.dir('you suck ass')
+				}
+			});
+			$scope.imgURI = undefined;
+			$ionicHistory.nextViewOptions({
+				disableBack: true
+			});
+			$state.go('app.home', {
+				clear: true
+			});
+		}
+	}
 })
 
 .controller('FriendController', function($scope, $state, $rootScope, $ionicHistory){
@@ -104,12 +104,12 @@ angular.module('ionicParseApp.controllers', [])
 			rejected: 'rejected',
 			approved: 'approved'
 		};
-
+		
 		var FriendRequest = Parse.Object.extend("FriendRequest");
 		//var friendRequest = new FriendRequest();
 		var currentUser = Parse.User.current();
 		var userQuery = new Parse.Query(Parse.User);
-
+		
 		$scope.sendInfo = function(){
 			userQuery.equalTo("username", $scope.user.userSearched);
 			userQuery.find({
@@ -121,22 +121,20 @@ angular.module('ionicParseApp.controllers', [])
 					} else {
 						alert("This should never happen, what did you do");
 					}
-
 				},
 				error: function (error) {
-					//Show if no user was found to match
-					alert("Error!")
-
+					alert('Failed with error: ' + error.message);
 				}
 			});
 			FriendRequest.set("username", currentUser)
 			FriendRequest.save(null, {
 				success: function(friendRequest) {
-					//execute succes
+					alert("success");
 				},
 				error: function(friendRequest, error) {
 					// Execute any logic that should take place if the save fails.
 					// error is a Parse.Error with an error code and message.
+					alert('Failed with error: ' + error.message);
 				}
 			});
 			$scope.imgURI = undefined;
@@ -157,7 +155,7 @@ angular.module('ionicParseApp.controllers', [])
 		var query = new Parse.Query(FinishedPic);
 		query.equalTo("UsersContributed",Parse.User.current().get('username'))
 		query.find({
-		  success: function(results) {
+			success: function(results) {
 				if (results.length === 0) {
 					$scope.lonelyText = "No Finished Selfie Chains yet sorry"
 				}
@@ -168,16 +166,16 @@ angular.module('ionicParseApp.controllers', [])
 						console.dir($scope.dataToDisplay)
 					}
 				}
-		  },
-		  error: function(error) {
-		    alert("Error: " + error.code + " " + error.message);
-		  }
+			},
+			error: function(error) {
+				alert("Error: " + error.code + " " + error.message);
+			}
 		});
 		$scope.doRefresh = function() {
 			$scope.dataToDisplay = [];
 			query.equalTo("UsersContributed",Parse.User.current().get('username'))
 			query.find({
-			  success: function(results) {
+				success: function(results) {
 					if (results.length === 0) {
 						$scope.lonelyText = "No Finished Selfie Chains yet sorry"
 					}
@@ -188,18 +186,18 @@ angular.module('ionicParseApp.controllers', [])
 						}
 					}
 					$scope.$broadcast('scroll.refreshComplete');
-			  },
-			  error: function(error) {
-			    alert("Error: " + error.code + " " + error.message);
-			  }
+				},
+				error: function(error) {
+					alert("Error: " + error.code + " " + error.message);
+				}
 			});
-  	};
+		};
 	}
 })
 
 .controller('ViewFinishedController', function($scope, $state,$stateParams, $rootScope, $ionicHistory) {
 	$scope.user = {};
-  if ($rootScope.isLoggedIn){
+	if ($rootScope.isLoggedIn){
 		var Pic = Parse.Object.extend("Picture");
 		var PicNew = new Pic();
 	 	var queryThatPic = new Parse.Query(Pic);
@@ -207,8 +205,8 @@ angular.module('ionicParseApp.controllers', [])
 		queryThatPic.equalTo("objectId", $scope.titleOfPic)
 		queryThatPic.find({
 			success: function (EachPic) {
-			  $scope.PicArray = EachPic[0].attributes.image64;
-			  $scope.UsersContrib = EachPic[0].attributes.UsersContributed;
+				$scope.PicArray = EachPic[0].attributes.image64;
+				$scope.UsersContrib = EachPic[0].attributes.UsersContributed;
 			},
 			error: function (error) {
 				alert(error);
@@ -218,44 +216,44 @@ angular.module('ionicParseApp.controllers', [])
 })
 
 .controller('RequestController', function($scope, $state, $rootScope, $ionicHistory) {
-  $scope.user = {};
-  if ($rootScope.isLoggedIn) {
-  	var Picture = Parse.Object.extend("Picture");
-  	var userQuery = new Parse.Query(Picture);
-
-  	userQuery.equalTo("nextuser", Parse.User.current().get('username'));
-  	userQuery.find({
-  		success: function (friend) {
-			if (friend.length === 0) {
-				$scope.lonelyText = "Looks a little lonely in here... Why not try sending a selfie to someone?"
-			}
-  			$scope.pictureRecieveds = friend
-  		},
-  		error: function (error) {
-  			alert(error);
-  		}
-  	});
-  	$scope.doRefresh = function() {
-  		userQuery.equalTo("nextuser", Parse.User.current().get('username'));
-  		userQuery.find({
-  			success: function (friend) {
+	$scope.user = {};
+	if ($rootScope.isLoggedIn) {
+		var Picture = Parse.Object.extend("Picture");
+		var userQuery = new Parse.Query(Picture);
+		
+		userQuery.equalTo("nextuser", Parse.User.current().get('username'));
+		userQuery.find({
+			success: function (friend) {
 				if (friend.length === 0) {
 					$scope.lonelyText = "Looks a little lonely in here... Why not try sending a selfie to someone?"
 				}
-  				$scope.pictureRecieveds = friend
-  				$scope.$broadcast('scroll.refreshComplete');
-  			},
-  			error: function (err) {
-  				//do something if error
-  			}
-  		});
-  	};
-  }
+				$scope.pictureRecieveds = friend
+			},
+			error: function (error) {
+				alert(error);
+			}
+		});
+		$scope.doRefresh = function() {
+			userQuery.equalTo("nextuser", Parse.User.current().get('username'));
+			userQuery.find({
+				success: function (friend) {
+					if (friend.length === 0) {
+						$scope.lonelyText = "Looks a little lonely in here... Why not try sending a selfie to someone?"
+					}
+					$scope.pictureRecieveds = friend
+					$scope.$broadcast('scroll.refreshComplete');
+				},
+				error: function (err) {
+					//do something if error
+				}
+			});
+		};
+	}
 })
 
 .controller('ViewController', function($scope, $state, $stateParams, $rootScope,$cordovaCamera, $ionicHistory) {
-  $scope.user = {};
-  if ($rootScope.isLoggedIn){
+	$scope.user = {};
+	if ($rootScope.isLoggedIn){
 		var Pic = Parse.Object.extend("Picture");
 		var PicNew = new Pic();
 	 	var queryThatPic = new Parse.Query(Pic);
@@ -263,67 +261,67 @@ angular.module('ionicParseApp.controllers', [])
 		queryThatPic.equalTo("objectId", $scope.titleOfPic)
 		queryThatPic.find({
 			success: function (EachPic) {
-			  //alert(friend.id)
-			  //console.dir(EachPic[0].attributes)
-			  $scope.PicArray = EachPic[0].attributes.image64;
-	      //console.dir($scope.love.length)
-	      //console.dir($scope.lengthofPicArray)
-			  $scope.currentUsersContrib = EachPic[0].attributes.UsersContributed;
+				//alert(friend.id)
+				//console.dir(EachPic[0].attributes)
+				$scope.PicArray = EachPic[0].attributes.image64;
+				//console.dir($scope.love.length)
+				//console.dir($scope.lengthofPicArray)
+				$scope.currentUsersContrib = EachPic[0].attributes.UsersContributed;
 			},
 			error: function (error) {
 				alert(error);
 			}
 		});
-	  $scope.takePicture = function() {
-				var options = {
-					quality: 75,
-		      destinationType: Camera.DestinationType.DATA_URL,
-		      sourceType: Camera.PictureSourceType.CAMERA,
-		      allowEdit: false,
-		      encodingType: Camera.EncodingType.JPEG,
-		      targetWidth: 300,
-		      targetHeight: 300,
-		      popoverOptions: CameraPopoverOptions,
-		      saveToPhotoAlbum: false
-		  	};
-
-	      $cordovaCamera.getPicture(options).then(function(imageData) {
-	          $scope.imgURI = "data:image/jpeg;base64," + imageData;
-	          //do other stuff
-	      }, function(err) {
-	          // An error occured. Show a message to the user
-	      });
-	  }
-	  $scope.newPicChain = function(){
+		$scope.takePicture = function() {
+			var options = {
+				quality: 75,
+				destinationType: Camera.DestinationType.DATA_URL,
+				sourceType: Camera.PictureSourceType.CAMERA,
+				allowEdit: false,
+				encodingType: Camera.EncodingType.JPEG,
+				targetWidth: 300,
+				targetHeight: 300,
+				popoverOptions: CameraPopoverOptions,
+				saveToPhotoAlbum: false
+			};
+			
+			$cordovaCamera.getPicture(options).then(function(imageData) {
+				$scope.imgURI = "data:image/jpeg;base64," + imageData;
+				//do other stuff
+				}, function(err) {
+				// An error occured. Show a message to the user
+			});
+		}
+		$scope.newPicChain = function(){
 			//alert("hello")
 			$scope.nextuser = $scope.user.nextUser
 			$scope.PicArray.push($scope.imgURI)
-		  console.dir($scope.imgURI)
+			console.dir($scope.imgURI)
 			queryThatPic.equalTo("objectId", $scope.titleOfPic)
 			queryThatPic.find({
 				success: function (EachPic) {
-				  //console.dir(EachPic[0].attributes)
-				  //console.dir(EachPic[0].attributes.UsersContributed)
-				  $scope.life = EachPic[0];
-				  $scope.currentUsersContrib = EachPic[0].attributes.UsersContributed;
-				  $scope.currentUsersContrib.push(Parse.User.current().get('username'))
-				  $scope.life.increment("currenchaincount")
-				  $scope.life.set("nextuser",$scope.user.nextUser)
-				  $scope.life.set("UsersContributed",$scope.currentUsersContrib)
-		      $scope.life.set("image64", $scope.PicArray)
-				  $scope.life.save();
-				  $ionicHistory.nextViewOptions({
-					disableBack: true
-				  });
-				  $state.go('app.requests', {
-					  clear: true
-				  });
+					//console.dir(EachPic[0].attributes)
+					//console.dir(EachPic[0].attributes.UsersContributed)
+					$scope.life = EachPic[0];
+					$scope.currentUsersContrib = EachPic[0].attributes.UsersContributed;
+					$scope.currentUsersContrib.push(Parse.User.current().get('username'))
+					$scope.life.increment("currenchaincount")
+					$scope.life.set("nextuser",$scope.user.nextUser)
+					$scope.life.set("UsersContributed",$scope.currentUsersContrib)
+					$scope.life.set("image64", $scope.PicArray)
+					$scope.life.save();
+					$ionicHistory.nextViewOptions({
+						disableBack: true
+					});
+					$state.go('app.requests', {
+						clear: true
+					});
 				},
 				error: function (error) {
 					alert(error);
 				}
-			 });
-	  }
+			});
+		}
 	}
 })
 
@@ -338,9 +336,9 @@ angular.module('ionicParseApp.controllers', [])
 		username: null,
 		password: null
 	};
-
+	
 	$scope.error = {};
-
+	
 	$scope.login = function() {
 		$scope.loading = $ionicLoading.show({
 			content: 'Logging in',
@@ -349,7 +347,7 @@ angular.module('ionicParseApp.controllers', [])
 			maxWidth: 200,
 			showDelay: 0
 		});
-
+		
 		var user = $scope.user;
 		Parse.User.logIn(('' + user.username).toLowerCase(), user.password, {
 			success: function(user) {
@@ -362,14 +360,14 @@ angular.module('ionicParseApp.controllers', [])
 				$state.go('app.home', {
 					clear: true
 				});
-
+				
 			},
 			error: function(user, err) {
 				$ionicLoading.hide();
 				// The login failed. Check error to see why.
 				if (err.code === 101) {
 					$scope.error.message = 'Invalid login credentials';
-					} else {
+				} else {
 					$scope.error.message = 'An unexpected error has ' +
 					'occurred, please try again.';
 				}
@@ -377,7 +375,7 @@ angular.module('ionicParseApp.controllers', [])
 			}
 		});
 	};
-
+	
 	$scope.forgot = function() {
 		$state.go('app.forgot');
 	};
@@ -389,7 +387,7 @@ angular.module('ionicParseApp.controllers', [])
 	$scope.state = {
 		success: false
 	};
-
+	
 	$scope.reset = function() {
 		$scope.loading = $ionicLoading.show({
 			content: 'Sending',
@@ -398,7 +396,7 @@ angular.module('ionicParseApp.controllers', [])
 			maxWidth: 200,
 			showDelay: 0
 		});
-
+		
 		Parse.User.requestPasswordReset($scope.user.email, {
 			success: function() {
 				// TODO: show success
@@ -410,7 +408,7 @@ angular.module('ionicParseApp.controllers', [])
 				$ionicLoading.hide();
 				if (err.code === 125) {
 					$scope.error.message = 'Email address does not exist';
-					} else {
+				} else {
 					$scope.error.message = 'An unknown error has occurred, ' +
 					'please try again';
 				}
@@ -418,7 +416,7 @@ angular.module('ionicParseApp.controllers', [])
 			}
 		});
 	};
-
+	
 	$scope.login = function() {
 		$state.go('app.login');
 	};
@@ -427,11 +425,11 @@ angular.module('ionicParseApp.controllers', [])
 .controller('RegisterController', function($scope, $state, $ionicLoading, $rootScope, $ionicHistory) {
 	$scope.user = {};
 	$scope.error = {};
-
+	
 	$scope.register = function() {
-
+		
 		// TODO: add age verification step
-
+		
 		$scope.loading = $ionicLoading.show({
 			content: 'Sending',
 			animation: 'fade-in',
@@ -439,12 +437,12 @@ angular.module('ionicParseApp.controllers', [])
 			maxWidth: 200,
 			showDelay: 0
 		});
-
+		
 		var user = new Parse.User();
 		user.set("username", $scope.user.username);
 		user.set("password", $scope.user.password);
 		user.set("email", $scope.user.email);
-
+		
 		user.signUp(null, {
 			success: function(user) {
 				$ionicLoading.hide();
@@ -462,10 +460,10 @@ angular.module('ionicParseApp.controllers', [])
 				if (error.code === 125) {
 					$scope.error.message = 'Please specify a valid email ' +
 					'address';
-					} else if (error.code === 202) {
+				} else if (error.code === 202) {
 					$scope.error.message = 'The username is already ' +
 					'registered';
-					} else {
+				} else {
 					$scope.error.message = error.message;
 				}
 				$scope.$apply();
@@ -478,7 +476,7 @@ angular.module('ionicParseApp.controllers', [])
 	if ($stateParams.clear) {
 		$ionicHistory.clearHistory();
 	}
-
+	
 	$scope.rightButtons = [{
 		type: 'button-positive',
 		content: '<i class="icon ion-navicon"></i>',
@@ -486,7 +484,7 @@ angular.module('ionicParseApp.controllers', [])
 			$scope.sideMenuController.toggleRight();
 		}
 	}];
-
+	
 	$scope.logout = function() {
 		Parse.User.logOut();
 		$rootScope.user = null;
@@ -496,8 +494,8 @@ angular.module('ionicParseApp.controllers', [])
 			clear: true
 		});
 	};
-
+	
 	$scope.toggleMenu = function() {
 		$scope.sideMenuController.toggleRight();
 	};
-	})
+})
