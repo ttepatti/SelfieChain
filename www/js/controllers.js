@@ -160,12 +160,10 @@ angular.module('ionicParseApp.controllers', [])
   	userQuery.equalTo("nextuser", Parse.User.current().get('username'));
   	userQuery.find({
   		success: function (friend) {
+			if (friend.length === 0) {
+				$scope.lonelyText = "Looks a little lonely in here... Why not try sending a selfie to someone?"
+			}
   			$scope.pictureRecieveds = friend
-  			/*for(var i = 0; i<friend.length; i++){
-  				var object = friend[i];
-  				$scope.pictureRecieved = object.get('nextuser');
-  				//alert(object.id + ' - ' + object.get('nextuser'));
-  			}*/
   		},
   		error: function (error) {
   			alert(error);
@@ -176,11 +174,6 @@ angular.module('ionicParseApp.controllers', [])
   		userQuery.find({
   			success: function (friend) {
   				$scope.pictureRecieveds = friend
-  				/*for(var i = 0; i<friend.length; i++){
-  					var object = friend[i];
-  					$scope.pictureRecieved = object.get('nextuser');
-  					//alert(object.id + ' - ' + object.get('nextuser'));
-  				}*/
   				$scope.$broadcast('scroll.refreshComplete');
   			},
   			error: function (err) {
