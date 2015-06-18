@@ -158,12 +158,11 @@ angular.module('ionicParseApp.controllers', [])
 		query.equalTo("UsersContributed",Parse.User.current().get('username'))
 		query.find({
 		  success: function(results) {
-				//console.dir($scope.dataRecieved)
 				for(var i=0; i< results.length;i++){
 					if(results[i].attributes.currenchaincount >= results[i].attributes.chain){
 						$scope.tempData = results[i];
 						$scope.dataToDisplay.push($scope.tempData)
-						//console.dir($scope.dataToDisplay)
+						console.dir($scope.dataToDisplay)
 					}
 				}
 		  },
@@ -193,18 +192,32 @@ angular.module('ionicParseApp.controllers', [])
 	}
 })
 
-.controller('ViewFinishedController', function($scope, $state, $rootScope, $ionicHistory) {
-
+.controller('ViewFinishedController', function($scope, $state,$stateParams, $rootScope, $ionicHistory) {
+	$scope.user = {};
+  if ($rootScope.isLoggedIn){
+		var Pic = Parse.Object.extend("Picture");
+		var PicNew = new Pic();
+	 	var queryThatPic = new Parse.Query(Pic);
+		$scope.titleOfPic = $stateParams.viewfinishid;
+		queryThatPic.equalTo("objectId", $scope.titleOfPic)
+		queryThatPic.find({
+			success: function (EachPic) {
+			  $scope.PicArray = EachPic[0].attributes.image64;
+			  $scope.UsersContrib = EachPic[0].attributes.UsersContributed;
+			},
+			error: function (error) {
+				alert(error);
+			}
+		});
+	}
 })
-
 
 .controller('RequestController', function($scope, $state, $rootScope, $ionicHistory) {
   $scope.user = {};
   if ($rootScope.isLoggedIn) {
   	var Picture = Parse.Object.extend("Picture");
   	var userQuery = new Parse.Query(Picture);
-
-  	//$scope.sendData = function(){
+		
   	userQuery.equalTo("nextuser", Parse.User.current().get('username'));
   	userQuery.find({
   		success: function (friend) {

@@ -1,0 +1,7 @@
+<ion-view title="H3SO5" >
+    <ion-content has-tabs="true" padding="true" ng-controller="ViewFinishedController">
+		<img ng-repeat="index in PicArray" ng-src="{{index}}"></img>
+    <ion-list>
+      <p ng-repeat="pictureRecieved in UsersContrib track by $index">{{pictureRecieved}}</p>
+    </ion-list>
+</ion-view>
