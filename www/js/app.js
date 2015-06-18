@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'ionicParseApp.controllers' is found in controllers.js
 angular.module('ionicParseApp',
-        [ 'ionic', 'ionicParseApp.controllers', 'ngCordova', 'angular-carousel', 'ngTouch']
+        [ 'ionic', 'ionicParseApp.controllers', 'ngCordova', 'angular-carousel']
     )
     .config(function($stateProvider, $urlRouterProvider) {
 

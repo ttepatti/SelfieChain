@@ -43,16 +43,16 @@ angular.module('ionicParseApp.controllers', [])
   if ($rootScope.isLoggedIn) {
   	$scope.takePicture = function() {
   		var options = {
-  			quality : 75,
-  			destinationType : Camera.DestinationType.DATA_URL,
-  			sourceType : Camera.PictureSourceType.CAMERA,
-  			allowEdit : true,
-  			encodingType: Camera.EncodingType.JPEG,
-  			targetWidth: 300,
-  			targetHeight: 300,
-  			popoverOptions: CameraPopoverOptions,
-  			saveToPhotoAlbum: false
-  		};
+				quality: 75,
+	      destinationType: Camera.DestinationType.DATA_URL,
+	      sourceType: Camera.PictureSourceType.CAMERA,
+	      allowEdit: false,
+	      encodingType: Camera.EncodingType.JPEG,
+	      targetWidth: 300,
+	      targetHeight: 300,
+	      popoverOptions: CameraPopoverOptions,
+	      saveToPhotoAlbum: false
+	  		};
 
   		$cordovaCamera.getPicture(options).then(function(imageData) {
   			$scope.imgURI = "data:image/jpeg;base64," + imageData;
@@ -194,74 +194,75 @@ angular.module('ionicParseApp.controllers', [])
 .controller('ViewController', function($scope, $state, $stateParams, $rootScope,$cordovaCamera, $ionicHistory) {
   $scope.user = {};
   if ($rootScope.isLoggedIn){
-	var Pic = Parse.Object.extend("Picture");
-	var PicNew = new Pic();
- 	var queryThatPic = new Parse.Query(Pic);
-	$scope.titleOfPic = $stateParams.viewid;
-	queryThatPic.equalTo("objectId", $scope.titleOfPic)
-	queryThatPic.find({
-		success: function (EachPic) {
-		  //alert(friend.id)
-		  //console.dir(EachPic[0].attributes)
-		  $scope.PicArray = EachPic[0].attributes.image64;
-      //console.dir($scope.love.length)
-      //console.dir($scope.lengthofPicArray)
-		  $scope.currentUsersContrib = EachPic[0].attributes.UsersContributed;
-		},
-		error: function (error) {
-			alert(error);
-		}
-	});
-  }
-  $scope.takePicture = function() {
-      var options = {
-          quality : 75,
-          destinationType : Camera.DestinationType.DATA_URL,
-          sourceType : Camera.PictureSourceType.CAMERA,
-          allowEdit : true,
-          encodingType: Camera.EncodingType.JPEG,
-          targetWidth: 300,
-          targetHeight: 300,
-          popoverOptions: CameraPopoverOptions,
-          saveToPhotoAlbum: false
-      };
+		var Pic = Parse.Object.extend("Picture");
+		var PicNew = new Pic();
+	 	var queryThatPic = new Parse.Query(Pic);
+		$scope.titleOfPic = $stateParams.viewid;
+		queryThatPic.equalTo("objectId", $scope.titleOfPic)
+		queryThatPic.find({
+			success: function (EachPic) {
+			  //alert(friend.id)
+			  //console.dir(EachPic[0].attributes)
+			  $scope.PicArray = EachPic[0].attributes.image64;
+	      //console.dir($scope.love.length)
+	      //console.dir($scope.lengthofPicArray)
+			  $scope.currentUsersContrib = EachPic[0].attributes.UsersContributed;
+			},
+			error: function (error) {
+				alert(error);
+			}
+		});
+	  $scope.takePicture = function() {
+				var options = {
+					quality: 75,
+		      destinationType: Camera.DestinationType.DATA_URL,
+		      sourceType: Camera.PictureSourceType.CAMERA,
+		      allowEdit: false,
+		      encodingType: Camera.EncodingType.JPEG,
+		      targetWidth: 300,
+		      targetHeight: 300,
+		      popoverOptions: CameraPopoverOptions,
+		      saveToPhotoAlbum: false
+		  	};
 
-      $cordovaCamera.getPicture(options).then(function(imageData) {
-          $scope.imgURI = "data:image/jpeg;base64," + imageData;
-          //do other stuff
-      }, function(err) {
-          // An error occured. Show a message to the user
-      });
-  }
-  $scope.newPicChain = function(){
-	$scope.nextuser = $scope.user.nextUser
-	$scope.PicArray.push($scope.imgURI)
-  console.dir($scope.imgURI)
-	queryThatPic.equalTo("objectId", $scope.titleOfPic)
-	queryThatPic.find({
-		success: function (EachPic) {
-		  //console.dir(EachPic[0].attributes)
-		  //console.dir(EachPic[0].attributes.UsersContributed)
-		  $scope.life = EachPic[0];
-		  $scope.currentUsersContrib = EachPic[0].attributes.UsersContributed;
-		  $scope.currentUsersContrib.push(Parse.User.current().get('username'))
-		  $scope.life.increment("currenchaincount")
-		  $scope.life.set("nextuser",$scope.user.nextUser)
-		  $scope.life.set("UsersContributed",$scope.currentUsersContrib)
-      $scope.life.set("image64", $scope.PicArray)
-		  $scope.life.save();
-		  $ionicHistory.nextViewOptions({
-			disableBack: true
-		  });
-		  $state.go('app.requests', {
-			  clear: true
-		  });
-		},
-		error: function (error) {
-			alert(error);
-		}
-	 });
-  }
+	      $cordovaCamera.getPicture(options).then(function(imageData) {
+	          $scope.imgURI = "data:image/jpeg;base64," + imageData;
+	          //do other stuff
+	      }, function(err) {
+	          // An error occured. Show a message to the user
+	      });
+	  }
+	  $scope.newPicChain = function(){
+			alert("hello")
+			$scope.nextuser = $scope.user.nextUser
+			$scope.PicArray.push($scope.imgURI)
+		  console.dir($scope.imgURI)
+			queryThatPic.equalTo("objectId", $scope.titleOfPic)
+			queryThatPic.find({
+				success: function (EachPic) {
+				  //console.dir(EachPic[0].attributes)
+				  //console.dir(EachPic[0].attributes.UsersContributed)
+				  $scope.life = EachPic[0];
+				  $scope.currentUsersContrib = EachPic[0].attributes.UsersContributed;
+				  $scope.currentUsersContrib.push(Parse.User.current().get('username'))
+				  $scope.life.increment("currenchaincount")
+				  $scope.life.set("nextuser",$scope.user.nextUser)
+				  $scope.life.set("UsersContributed",$scope.currentUsersContrib)
+		      $scope.life.set("image64", $scope.PicArray)
+				  $scope.life.save();
+				  $ionicHistory.nextViewOptions({
+					disableBack: true
+				  });
+				  $state.go('app.requests', {
+					  clear: true
+				  });
+				},
+				error: function (error) {
+					alert(error);
+				}
+			 });
+	  }
+	}
 })
 
 .controller('HomeController', function($scope, $state, $rootScope) {
