@@ -1,7 +1,10 @@
 <ion-view title="H3SO5" >
     <ion-content has-tabs="true" padding="true" ng-controller="ViewFinishedController">
-		<img ng-repeat="index in PicArray" ng-src="{{index}}"></img>
+      <ion-scroll direction="x" class="wide-as-needed">
+		      <img ng-repeat="index in PicArray" ng-src="{{index}}"></img>
+      </ion-scroll>
+    <h1 style = "text-align:center">Users who made this Selfie Chain</h1>
     <ion-list>
-      <p ng-repeat="pictureRecieved in UsersContrib track by $index">{{pictureRecieved}}</p>
+      <p ng-repeat="pictureRecieved in UsersContrib track by $index" class = "item">{{pictureRecieved}}</p>
     </ion-list>
 </ion-view>
