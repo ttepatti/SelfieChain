@@ -173,6 +173,9 @@ angular.module('ionicParseApp.controllers', [])
   		userQuery.equalTo("nextuser", Parse.User.current().get('username'));
   		userQuery.find({
   			success: function (friend) {
+				if (friend.length === 0) {
+					$scope.lonelyText = "Looks a little lonely in here... Why not try sending a selfie to someone?"
+				}
   				$scope.pictureRecieveds = friend
   				$scope.$broadcast('scroll.refreshComplete');
   			},
