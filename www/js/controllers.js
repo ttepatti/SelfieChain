@@ -158,6 +158,9 @@ angular.module('ionicParseApp.controllers', [])
 		query.equalTo("UsersContributed",Parse.User.current().get('username'))
 		query.find({
 		  success: function(results) {
+				if (results.length === 0) {
+					$scope.lonelyText = "No Finished Selfie Chains yet sorry"
+				}
 				for(var i=0; i< results.length;i++){
 					if(results[i].attributes.currenchaincount >= results[i].attributes.chain){
 						$scope.tempData = results[i];
@@ -175,7 +178,9 @@ angular.module('ionicParseApp.controllers', [])
 			query.equalTo("UsersContributed",Parse.User.current().get('username'))
 			query.find({
 			  success: function(results) {
-					//console.dir($scope.dataRecieved)
+					if (results.length === 0) {
+						$scope.lonelyText = "No Finished Selfie Chains yet sorry"
+					}
 					for(var i=0; i< results.length;i++){
 						if(results[i].attributes.currenchaincount >= results[i].attributes.chain){
 							$scope.tempData = results[i];
@@ -217,7 +222,7 @@ angular.module('ionicParseApp.controllers', [])
   if ($rootScope.isLoggedIn) {
   	var Picture = Parse.Object.extend("Picture");
   	var userQuery = new Parse.Query(Picture);
-		
+
   	userQuery.equalTo("nextuser", Parse.User.current().get('username'));
   	userQuery.find({
   		success: function (friend) {
