@@ -2,13 +2,13 @@
 <script type="text/javascript" src="../js/angular-touch.js"></script>
 <script type="text/javascript" src="../js/angular-carousel.js"></script>
 
-<ion-view title="H3SO5" >
+<ion-view title="H3SO5">
     <ion-content has-tabs="true" padding="true" ng-controller="ViewController">
 		<!-- <img ng-repeat="index in PicArray" ng-src="{{index}}"> -->
 		
-		<ul rn-carousel class="image" rn-carousel-transition="slide"">
+		<ul rn-carousel class="image" rn-carousel-transition="slide">
 			<li ng-repeat="image in PicArray">
-				<div class="layer">{{image}}</div>
+				<div class="layer"><img src="{{image}}"</div>
 			</li>
 		</ul>
 		
