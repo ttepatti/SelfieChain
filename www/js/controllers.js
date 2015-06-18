@@ -105,16 +105,30 @@ angular.module('ionicParseApp.controllers', [])
 			approved: 'approved'
 		};
 		
-		var FriendRequest = Parse.Object.extend("FriendRequest");
-		//var friendRequest = new FriendRequest();
-		var currentUser = Parse.User.current();
 		var userQuery = new Parse.Query(Parse.User);
 		
 		$scope.sendInfo = function(){
 			userQuery.equalTo("username", $scope.user.userSearched);
 			userQuery.find({
-				success: function (friend) {
-					if (friend.length == 1) {
+				success: function (friend) {//friend is an array
+					if (friend.length == 1) { //should probably also check if they are already friends
+						var friendRequest = Parse.Object.extend("FriendRequest");
+						var currentUser = Parse.User.current();
+						var requestObject = new friendRequest();//I don't know 
+						
+						requestObject.set("userFrom", currentUser)
+						requestObject.set("userTo", friend[0])
+						
+						requestObject.save(null, {
+							success: function(friendRequest) {
+								//alert("Saved");
+							},
+							error: function(friendRequest, error) {
+								// Execute any logic that should take place if the save fails.
+								// error is a Parse.Error with an error code and message.
+								alert('Failed save with error: ' + error.message);
+							}
+						});
 						alert("Request sent!");
 					} else if (friend.length == 0){
 						alert("User not found");
@@ -126,17 +140,7 @@ angular.module('ionicParseApp.controllers', [])
 					alert('Failed with error: ' + error.message);
 				}
 			});
-			FriendRequest.set("username", currentUser)
-			FriendRequest.save(null, {
-				success: function(friendRequest) {
-					alert("success");
-				},
-				error: function(friendRequest, error) {
-					// Execute any logic that should take place if the save fails.
-					// error is a Parse.Error with an error code and message.
-					alert('Failed with error: ' + error.message);
-				}
-			});
+						
 			$scope.imgURI = undefined;
 			$ionicHistory.nextViewOptions({
 				disableBack: true
