@@ -1,5 +1,19 @@
-<ion-view title="H3SO5" >
-    <ion-content has-tabs="true" padding="true" ng-controller="HomeController" id="myName">
-		Welcome, {{user.attributes.username}}! Please use the menu on the left to select an option.
+<ion-view title="H3SO5" right-buttons="rightButtons" >
+    <ion-content has-header="true" has-tabs="true" ng-controller="FinishedController">
+        <!--<button class="button" ng-click="sendData()">Send</button>-->
+        <ion-refresher
+          pulling-text="Pull to refresh..."
+          on-refresh="doRefresh()">
+        </ion-refresher>
+			<br />
+		    {{lonelyText}}
+        <ion-list>
+          <div>
+            <a ng-repeat="pictureRecieved in dataToDisplay" href="#/app//viewfinished/{{pictureRecieved.id}}" class="item">
+              <h2>{{pictureRecieved.get('name')}}</h2>
+            </br>
+            </a>
+          </div>
+        </ion-list>
     </ion-content>
 </ion-view>

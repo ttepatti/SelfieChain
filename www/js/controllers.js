@@ -151,24 +151,45 @@ angular.module('ionicParseApp.controllers', [])
 })
 
 .controller('FinishedController', function($scope, $state, $rootScope, $ionicHistory) {
-	$scope.user = {};
+	$scope.dataToDisplay = [];
 	if ($rootScope.isLoggedIn) {
 		var FinishedPic = Parse.Object.extend("Picture");
 		var query = new Parse.Query(FinishedPic);
 		query.equalTo("UsersContributed",Parse.User.current().get('username'))
 		query.find({
 		  success: function(results) {
-		    alert(results.length);
-		    // Do something with the returned Parse.Object values
-		    for (var i = 0; i < results.length; i++) {
-		      var object = results[i];
-		      alert(object.id + ' - ' + object.get('playerName'));
-		    }
+				//console.dir($scope.dataRecieved)
+				for(var i=0; i< results.length;i++){
+					if(results[i].attributes.currenchaincount >= results[i].attributes.chain){
+						$scope.tempData = results[i];
+						$scope.dataToDisplay.push($scope.tempData)
+						//console.dir($scope.dataToDisplay)
+					}
+				}
 		  },
 		  error: function(error) {
 		    alert("Error: " + error.code + " " + error.message);
 		  }
 		});
+		$scope.doRefresh = function() {
+			$scope.dataToDisplay = [];
+			query.equalTo("UsersContributed",Parse.User.current().get('username'))
+			query.find({
+			  success: function(results) {
+					//console.dir($scope.dataRecieved)
+					for(var i=0; i< results.length;i++){
+						if(results[i].attributes.currenchaincount >= results[i].attributes.chain){
+							$scope.tempData = results[i];
+							$scope.dataToDisplay.push($scope.tempData)
+						}
+					}
+					$scope.$broadcast('scroll.refreshComplete');
+			  },
+			  error: function(error) {
+			    alert("Error: " + error.code + " " + error.message);
+			  }
+			});
+  	};
 	}
 })
 
