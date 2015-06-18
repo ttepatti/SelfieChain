@@ -1,0 +1,11 @@
+<ion-view title="H3SO5" right-buttons="rightButtons" >
+    <ion-content has-header="true" has-tabs="true" padding="true" ng-controller="FriendController">
+		Enter a username here to add them as a friend
+		<br /><br />
+        <label class="item item-input">
+          <input type="text" ng-model="user.userSearched" placeholder="Username">
+        </label>
+		<br />
+        <button class="button" ng-click="sendInfo()">Send</button>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,28 @@
+/* Your app's CSS, go crazy, make it your own */
+
+.ionic-logo {
+  display: block;
+  margin: 15px auto;
+  width: 96px;
+  height: 96px;
+}
+
+.bar{background-color:#565656}
+/**.item{background-color:#000033; color:white;} */
+body{font-family:"Trebuchet MS", Helvetica, sans-serif;}
+
+#longBreak{margin-top:20000px; font-size:1200%;}
+
+#centPic{text-align: center;}
+
+
+/* The bg class is for adding a background image on the welcome.html page */
+.bg {
+	background-image: url(../img/bg.jpg);
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.hideable {
+	display: none;
+}
