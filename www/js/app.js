@@ -89,6 +89,16 @@ angular.module('ionicParseApp',
                 }
             })
 
+            .state('app.viewfinished', {
+                url: '/viewfinished/:viewfinishid',
+                views: {
+                    'menuContent': {
+                        templateUrl: 'templates/viewfinished.html',
+                        controller: 'ViewFinishedController'
+                    }
+                }
+            })
+
             .state('app.friend', {
                 url: '/friend',
                 views: {

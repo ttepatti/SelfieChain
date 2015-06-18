@@ -150,6 +150,33 @@ angular.module('ionicParseApp.controllers', [])
 	}
 })
 
+.controller('FinishedController', function($scope, $state, $rootScope, $ionicHistory) {
+	$scope.user = {};
+	if ($rootScope.isLoggedIn) {
+		var FinishedPic = Parse.Object.extend("Picture");
+		var query = new Parse.Query(FinishedPic);
+		query.equalTo("UsersContributed",Parse.User.current().get('username'))
+		query.find({
+		  success: function(results) {
+		    alert(results.length);
+		    // Do something with the returned Parse.Object values
+		    for (var i = 0; i < results.length; i++) {
+		      var object = results[i];
+		      alert(object.id + ' - ' + object.get('playerName'));
+		    }
+		  },
+		  error: function(error) {
+		    alert("Error: " + error.code + " " + error.message);
+		  }
+		});
+	}
+})
+
+.controller('ViewFinishedController', function($scope, $state, $rootScope, $ionicHistory) {
+
+})
+
+
 .controller('RequestController', function($scope, $state, $rootScope, $ionicHistory) {
   $scope.user = {};
   if ($rootScope.isLoggedIn) {
