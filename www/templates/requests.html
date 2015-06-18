@@ -1,5 +1,5 @@
 <ion-view title="H3SO5" right-buttons="rightButtons" >
-    <ion-content has-header="true" has-tabs="true" padding="true" ng-controller="RequestController">
+    <ion-content has-header="true" has-tabs="true" ng-controller="RequestController">
         <!--<button class="button" ng-click="sendData()">Send</button>-->
         <ion-refresher
           pulling-text="Pull to refresh..."
@@ -7,7 +7,7 @@
         </ion-refresher>
         <ion-list>
           <div>
-            <a ng-repeat="pictureRecieved in pictureRecieveds" href="#/app/view/{{pictureRecieved.id}}" class="item">
+            <a ng-repeat="pictureRecieved in pictureRecieveds" href="#/app/view/{{pictureRecieved.id}}" class = "item">
               <h2>{{pictureRecieved.get('name')}}</h2>
             </br>
               <p>{{pictureRecieved.get('currentUser')}}</p>
