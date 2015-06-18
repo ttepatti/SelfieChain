@@ -23,6 +23,6 @@ body{font-family:"Trebuchet MS", Helvetica, sans-serif;}
 	background-position: center center;
 }
 
-.hideable {
-	display: none;
+.padding{
+	padding: none;
 }
