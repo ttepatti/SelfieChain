@@ -7,11 +7,12 @@
     <ion-content has-tabs="true" padding="true" ng-controller="ViewController">	  
 		<!-- <img ng-repeat="index in PicArray" ng-src="{{index}}"> -->
 	  
-		<ul rn-carousel class="image">
+		<ul rn-carousel class="image" rn-carousel-transition="hexagon">
 			<li ng-repeat="image in PicArray">
 				<div class="layer">{{image}}</div>
 			</li>
 		</ul>
+		
 		<img ng-show="imgURI === undefined" ng-src="http://placehold.it/300x300">
 		<label class="item item-input">
 			<input type="text" ng-model="user.nextUser" placeholder="Enter Next User">
