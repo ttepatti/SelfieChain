@@ -445,8 +445,11 @@ angular.module('ionicParseApp.controllers', [])
 })
 
 .controller('RegisterController', function($scope, $state, $ionicLoading, $rootScope, $ionicHistory) {
+	$scope.showButton = false;
 	$scope.user = {};
 	$scope.error = {};
+	if(true)
+		$scope.showButton = true;
 
 	$scope.register = function() {
 
