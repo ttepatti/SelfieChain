@@ -112,7 +112,7 @@ angular.module('ionicParseApp.controllers', [])
 			userQuery.equalTo("username", $scope.user.userSearched);
 			userQuery.find({
 				success: function (friend) {//friend is an array
-					if (friend.length == 1) { //should probably also check if they are already friends
+					if (friend.length == 1 && $scope.user.userSearched != Parse.User.current().get("username")) { //should probably also check if they are already friends
 						var friendRequest = Parse.Object.extend("FriendRequest");
 						var currentUser = Parse.User.current().get('username');
 						var requestObject = new friendRequest();//I don't know
@@ -135,7 +135,7 @@ angular.module('ionicParseApp.controllers', [])
 					} else if (friend.length == 0){
 						alert("User not found");
 					} else {
-						alert("This should never happen, what did you do");
+						alert("Cannot send request to self");
 					}
 				},
 				error: function (error) {
