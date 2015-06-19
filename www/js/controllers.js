@@ -5,7 +5,7 @@ angular.module('ionicParseApp.controllers', [])
 		$ionicHistory.clearHistory();
 		$ionicHistory.clearCache();
 	}
-	
+
 	$scope.logout = function() {
 		Parse.User.logOut();
 		$rootScope.user = null;
@@ -22,15 +22,15 @@ angular.module('ionicParseApp.controllers', [])
 		$ionicHistory.clearHistory();
 		$ionicHistory.clearCache();
 	}
-	
+
 	$scope.login = function() {
 		$state.go('app.login');
 	};
-	
+
 	$scope.signUp = function() {
 		$state.go('app.register');
 	};
-	
+
 	if ($rootScope.isLoggedIn) {
 		$state.go('app.home');
 	}
@@ -53,7 +53,7 @@ angular.module('ionicParseApp.controllers', [])
 				popoverOptions: CameraPopoverOptions,
 				saveToPhotoAlbum: false
 			};
-			
+
 			$cordovaCamera.getPicture(options).then(function(imageData) {
 				$scope.imgURI = "data:image/jpeg;base64," + imageData;
 				//do other stuff
@@ -97,6 +97,7 @@ angular.module('ionicParseApp.controllers', [])
 
 .controller('FriendController', function($scope, $state, $rootScope, $ionicHistory){
 	//http://timothywalters-devthoughts.blogspot.com/2014/06/friend-request-in-javascript-using.html <-- use this to help
+	$scope.friendsrequest = [];
 	$scope.user = {};
 	if ($rootScope.isLoggedIn) {
 		var RequestStatus = {
@@ -104,21 +105,22 @@ angular.module('ionicParseApp.controllers', [])
 			rejected: 'rejected',
 			approved: 'approved'
 		};
-		
+
 		var userQuery = new Parse.Query(Parse.User);
-		
+
 		$scope.sendInfo = function(){
 			userQuery.equalTo("username", $scope.user.userSearched);
 			userQuery.find({
 				success: function (friend) {//friend is an array
 					if (friend.length == 1) { //should probably also check if they are already friends
 						var friendRequest = Parse.Object.extend("FriendRequest");
-						var currentUser = Parse.User.current();
-						var requestObject = new friendRequest();//I don't know 
-						
+						var currentUser = Parse.User.current().get('username');
+						var requestObject = new friendRequest();//I don't know
+
 						requestObject.set("userFrom", currentUser)
-						requestObject.set("userTo", friend[0])
-						
+						requestObject.set("userTo", $scope.user.userSearched)
+
+
 						requestObject.save(null, {
 							success: function(friendRequest) {
 								//alert("Saved");
@@ -140,7 +142,7 @@ angular.module('ionicParseApp.controllers', [])
 					alert('Failed with error: ' + error.message);
 				}
 			});
-						
+
 			$scope.imgURI = undefined;
 			$ionicHistory.nextViewOptions({
 				disableBack: true
@@ -149,6 +151,22 @@ angular.module('ionicParseApp.controllers', [])
 				clear: true
 			});
 		}
+
+		var mRequests = Parse.Object.extend("FriendRequest");
+		var requests = new Parse.Query(mRequests);
+		requests.equalTo("userTo", Parse.User.current().get('username'));
+		requests.find({
+		  success: function(results) {
+				for(var i = 0; i<results.length; i++){
+					$scope.list =results[i].attributes.userFrom
+					$scope.friendsrequest.push($scope.list)
+					console.dir($scope.friendsrequest)
+				}
+		  },
+		  error: function(error) {
+		    alert("Error: " + error.code + " " + error.message);
+		  }
+		});
 	}
 })
 
@@ -224,7 +242,7 @@ angular.module('ionicParseApp.controllers', [])
 	if ($rootScope.isLoggedIn) {
 		var Picture = Parse.Object.extend("Picture");
 		var userQuery = new Parse.Query(Picture);
-		
+
 		userQuery.equalTo("nextuser", Parse.User.current().get('username'));
 		userQuery.find({
 			success: function (friend) {
@@ -288,7 +306,7 @@ angular.module('ionicParseApp.controllers', [])
 				popoverOptions: CameraPopoverOptions,
 				saveToPhotoAlbum: false
 			};
-			
+
 			$cordovaCamera.getPicture(options).then(function(imageData) {
 				$scope.imgURI = "data:image/jpeg;base64," + imageData;
 				//do other stuff
@@ -340,9 +358,9 @@ angular.module('ionicParseApp.controllers', [])
 		username: null,
 		password: null
 	};
-	
+
 	$scope.error = {};
-	
+
 	$scope.login = function() {
 		$scope.loading = $ionicLoading.show({
 			content: 'Logging in',
@@ -351,7 +369,7 @@ angular.module('ionicParseApp.controllers', [])
 			maxWidth: 200,
 			showDelay: 0
 		});
-		
+
 		var user = $scope.user;
 		Parse.User.logIn(('' + user.username).toLowerCase(), user.password, {
 			success: function(user) {
@@ -364,7 +382,7 @@ angular.module('ionicParseApp.controllers', [])
 				$state.go('app.home', {
 					clear: true
 				});
-				
+
 			},
 			error: function(user, err) {
 				$ionicLoading.hide();
@@ -379,7 +397,7 @@ angular.module('ionicParseApp.controllers', [])
 			}
 		});
 	};
-	
+
 	$scope.forgot = function() {
 		$state.go('app.forgot');
 	};
@@ -391,7 +409,7 @@ angular.module('ionicParseApp.controllers', [])
 	$scope.state = {
 		success: false
 	};
-	
+
 	$scope.reset = function() {
 		$scope.loading = $ionicLoading.show({
 			content: 'Sending',
@@ -400,7 +418,7 @@ angular.module('ionicParseApp.controllers', [])
 			maxWidth: 200,
 			showDelay: 0
 		});
-		
+
 		Parse.User.requestPasswordReset($scope.user.email, {
 			success: function() {
 				// TODO: show success
@@ -420,7 +438,7 @@ angular.module('ionicParseApp.controllers', [])
 			}
 		});
 	};
-	
+
 	$scope.login = function() {
 		$state.go('app.login');
 	};
@@ -429,11 +447,11 @@ angular.module('ionicParseApp.controllers', [])
 .controller('RegisterController', function($scope, $state, $ionicLoading, $rootScope, $ionicHistory) {
 	$scope.user = {};
 	$scope.error = {};
-	
+
 	$scope.register = function() {
-		
+
 		// TODO: add age verification step
-		
+
 		$scope.loading = $ionicLoading.show({
 			content: 'Sending',
 			animation: 'fade-in',
@@ -441,12 +459,12 @@ angular.module('ionicParseApp.controllers', [])
 			maxWidth: 200,
 			showDelay: 0
 		});
-		
+
 		var user = new Parse.User();
 		user.set("username", $scope.user.username);
 		user.set("password", $scope.user.password);
 		user.set("email", $scope.user.email);
-		
+
 		user.signUp(null, {
 			success: function(user) {
 				$ionicLoading.hide();
@@ -480,7 +498,7 @@ angular.module('ionicParseApp.controllers', [])
 	if ($stateParams.clear) {
 		$ionicHistory.clearHistory();
 	}
-	
+
 	$scope.rightButtons = [{
 		type: 'button-positive',
 		content: '<i class="icon ion-navicon"></i>',
@@ -488,7 +506,7 @@ angular.module('ionicParseApp.controllers', [])
 			$scope.sideMenuController.toggleRight();
 		}
 	}];
-	
+
 	$scope.logout = function() {
 		Parse.User.logOut();
 		$rootScope.user = null;
@@ -498,7 +516,7 @@ angular.module('ionicParseApp.controllers', [])
 			clear: true
 		});
 	};
-	
+
 	$scope.toggleMenu = function() {
 		$scope.sideMenuController.toggleRight();
 	};
