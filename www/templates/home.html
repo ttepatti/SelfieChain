@@ -1,5 +1,22 @@
 <ion-view title="Selfie Chain" >
-    <ion-content has-tabs="true" padding="true" ng-controller="HomeController" id="myName">
-		Welcome, {{user.attributes.username}}! Please use the menu on the left to select an option.
+    <ion-content has-header="true" has-tabs="true" ng-controller="RequestController">
+        <!--<button class="button" ng-click="sendData()">Send</button>-->
+        <ion-refresher
+          pulling-text="Pull to refresh..."
+          on-refresh="doRefresh()">
+        </ion-refresher>
+		    <p style="text-align: center">{{lonelyText}}</p>
+        <ion-list>
+          <div class="item item-divider">
+            Selfie Chain Requests
+          </div>
+          <div>
+            <a ng-repeat="pictureRecieved in pictureRecieveds" href="#/app/view/{{pictureRecieved.id}}" class="item">
+              <h2>{{pictureRecieved.get('name')}}</h2>
+            </br>
+              <p>From: {{pictureRecieved.get('UsersContributed').slice(-1).pop()}}</p>
+            </a>
+          </div>
+        </ion-list>
     </ion-content>
 </ion-view>

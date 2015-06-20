@@ -249,6 +249,7 @@ angular.module('ionicParseApp.controllers', [])
 				if (friend.length === 0) {
 					$scope.lonelyText = "Looks a little lonely in here... Why not try sending a selfie to someone?"
 				}
+				console.dir(friend)
 				$scope.pictureRecieveds = friend
 			},
 			error: function (error) {

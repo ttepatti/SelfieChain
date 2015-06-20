@@ -24,7 +24,11 @@ Made with love by [alevicki](https://github.com/alevicki)
 
 ## TodoList
 1).Add Friends</br>
-2).Send array of pictures back to original user</br>
+2).Put FriendsList on home page</br>
+3).Reroute create to friendslist</br>
+4).ux stuff</br>
+5).make adding Friend work</br>
+6).make chain feature work</br>
 
 =======
 Made with swag by Chaitu and Tim
