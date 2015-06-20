@@ -113,7 +113,7 @@ angular.module('ionicParseApp.controllers', [])
 			userQuery.find({
 				success: function (friend) {//friend is an array
 					if (friend.length == 1 && $scope.user.userSearched != Parse.User.current().get("username")) { //should probably also check if they are already friends
-						console.dir(friend[0].id);
+						//console.dir(friend[0].id);
 						var friendRequest = Parse.Object.extend("FriendRequest");
 						var currentUser = Parse.User.current().get('username');
 						var requestObject = new friendRequest();//I don't know
@@ -156,17 +156,19 @@ angular.module('ionicParseApp.controllers', [])
 		var requests = new Parse.Query(mRequests);
 		requests.equalTo("userTo", Parse.User.current().get('username'));
 		requests.find({
-		  success: function(results) {
+			success: function(results) {
+				//alert(results.length + " requests")
 				for(var i = 0; i<results.length; i++){
-					//$scope.list =results[i].attributes.userFrom
-					$scope.list =results[i]
-					$scope.friendsrequest.push($scope.list)
-					console.dir($scope.friendsrequest)
+					if(results[i].attributes.status != "accepted" && results[i].attributes.status != "rejected") {
+						$scope.list = results[i]
+						$scope.friendsrequest.push($scope.list)
+						//console.dir($scope.friendsrequest)
+					}
 				}
-		  },
-		  error: function(error) {
-		    alert("Error: " + error.code + " " + error.message);
-		  }
+			},
+			error: function(error) {
+				alert("Error: " + error.code + " " + error.message);
+			}
 		});
 	}
 })
@@ -174,38 +176,42 @@ angular.module('ionicParseApp.controllers', [])
 .controller('FriendDecController', function($scope, $state, $stateParams, $rootScope, $ionicHistory) {
 	if ($rootScope.isLoggedIn) {
 		$scope.acceptFriend = function(){
-			$scope.friendDecId = $stateParams.friendDec
+			var currentUser = Parse.User.current();
+			var currentUserName = currentUser.get("username")
+			
+			//We need to get the other person in the request
 			var requests = Parse.Object.extend("FriendRequest");
-			var query = new Parse.Query(requests);
-			var userQuery = new Parse.Query(Parse.User);
-			query.equalTo("objectId", $stateParams.friendDec)
-			query.find({
+			var getRequestQuery = new Parse.Query(requests);
+			//stateParams.friendDec is the object id of the friend request. I don't know why
+			getRequestQuery.equalTo("objectId", $stateParams.friendDec)
+			getRequestQuery.find({
 				success: function(results){
-					//console.dir(results)
-					$scope.userFrom = results[0].attributes.userFromid.id
-					$scope.currentUser = results[0].attributes.userToId
-					//console.dir($scope.userFrom)
-					//console.dir($scope.currentUser)
-					//shits about to get ugly
-					userQuery.equalTo("objectId", $scope.userFrom)
-					userQuery.find({
-						success: function(userResults){
-							console.dir(userResults)
-							$scope.savevar = userResults[0];
-							$scope.currentFriends = userResults[0].attributes.friends
-							$scope.usertoAdd = $scope.currentUser
-							$scope.currentFriends.push($scope.usertoAdd)
-							console.log($scope.currentFriends)
-							$scope.savevar.set("friends", $scope.currentFriends)
-							$scope.savevar.save()
-						}
-					});
-					userQuery.equalTo("objectId", $scope.currentUser)
-					userQuery.find({
-						success: function(results){
-							alert("worked");
-						}
-					});
+					console.log("Accepting request id " + results[0].id)
+					var userFromName = results[0].get("userFrom")
+					var userFromid = results[0].get("userFromid")
+					
+					results[0].set("status", "accepted")
+					results[0].save()
+				}
+			});
+		}
+		$scope.rejectFriend = function(){ //Violates DRY atm but idk
+			var currentUser = Parse.User.current();
+			var currentUserName = currentUser.get("username")
+			
+			//We need to get the other person in the request
+			var requests = Parse.Object.extend("FriendRequest");
+			var getRequestQuery = new Parse.Query(requests);
+			//stateParams.friendDec is the object id of the friend request. I don't know why
+			getRequestQuery.equalTo("objectId", $stateParams.friendDec)
+			getRequestQuery.find({
+				success: function(results){
+					console.log("Rejecting request id " + results[0].id)
+					var userFromName = results[0].get("userFrom")
+					var userFromid = results[0].get("userFromid")
+					
+					results[0].set("status", "rejected") //<-- the only changed line from above
+					results[0].save()
 				}
 			});
 		}
