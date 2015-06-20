@@ -109,6 +109,16 @@ angular.module('ionicParseApp',
                 }
             })
 
+            .state('app.friendDec', {
+                url: '/friendDec/:friendDec',
+                views: {
+                    'menuContent': {
+                        templateUrl: 'templates/friendDec.html',
+                        controller: 'FriendDecController'
+                    }
+                }
+            })
+
             .state('app.forgot', {
                 url: '/forgot',
                 views: {

@@ -14,8 +14,8 @@
             Friend Requests
           </div>
           <div>
-            <a ng-repeat="person in friendsrequest" href="#" class="item">
-              <h2>From: {{person}}</h2>
+            <a ng-repeat="person in friendsrequest" href="#/app/friendDec/{{person.id}}" class="item">
+              <h2>From: {{person.attributes.userFrom}}</h2>
             </a>
           </div>
         </ion-list>

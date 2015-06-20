@@ -113,12 +113,15 @@ angular.module('ionicParseApp.controllers', [])
 			userQuery.find({
 				success: function (friend) {//friend is an array
 					if (friend.length == 1 && $scope.user.userSearched != Parse.User.current().get("username")) { //should probably also check if they are already friends
+						console.dir(friend[0].id);
 						var friendRequest = Parse.Object.extend("FriendRequest");
 						var currentUser = Parse.User.current().get('username');
 						var requestObject = new friendRequest();//I don't know
 
 						requestObject.set("userFrom", currentUser)
+						requestObject.set("userFromid", Parse.User.current())
 						requestObject.set("userTo", $scope.user.userSearched)
+						requestObject.set("userToId", friend[0].id)
 
 
 						requestObject.save(null, {
@@ -147,9 +150,6 @@ angular.module('ionicParseApp.controllers', [])
 			$ionicHistory.nextViewOptions({
 				disableBack: true
 			});
-			$state.go('app.home', {
-				clear: true
-			});
 		}
 
 		var mRequests = Parse.Object.extend("FriendRequest");
@@ -158,7 +158,8 @@ angular.module('ionicParseApp.controllers', [])
 		requests.find({
 		  success: function(results) {
 				for(var i = 0; i<results.length; i++){
-					$scope.list =results[i].attributes.userFrom
+					//$scope.list =results[i].attributes.userFrom
+					$scope.list =results[i]
 					$scope.friendsrequest.push($scope.list)
 					console.dir($scope.friendsrequest)
 				}
@@ -167,6 +168,47 @@ angular.module('ionicParseApp.controllers', [])
 		    alert("Error: " + error.code + " " + error.message);
 		  }
 		});
+	}
+})
+
+.controller('FriendDecController', function($scope, $state, $stateParams, $rootScope, $ionicHistory) {
+	if ($rootScope.isLoggedIn) {
+		$scope.acceptFriend = function(){
+			$scope.friendDecId = $stateParams.friendDec
+			var requests = Parse.Object.extend("FriendRequest");
+			var query = new Parse.Query(requests);
+			var userQuery = new Parse.Query(Parse.User);
+			query.equalTo("objectId", $stateParams.friendDec)
+			query.find({
+				success: function(results){
+					//console.dir(results)
+					$scope.userFrom = results[0].attributes.userFromid.id
+					$scope.currentUser = results[0].attributes.userToId
+					//console.dir($scope.userFrom)
+					//console.dir($scope.currentUser)
+					//shits about to get ugly
+					userQuery.equalTo("objectId", $scope.userFrom)
+					userQuery.find({
+						success: function(userResults){
+							console.dir(userResults)
+							$scope.savevar = userResults[0];
+							$scope.currentFriends = userResults[0].attributes.friends
+							$scope.usertoAdd = $scope.currentUser
+							$scope.currentFriends.push($scope.usertoAdd)
+							console.log($scope.currentFriends)
+							$scope.savevar.set("friends", $scope.currentFriends)
+							$scope.savevar.save()
+						}
+					});
+					userQuery.equalTo("objectId", $scope.currentUser)
+					userQuery.find({
+						success: function(results){
+							alert("worked");
+						}
+					});
+				}
+			});
+		}
 	}
 })
 
@@ -449,6 +491,7 @@ angular.module('ionicParseApp.controllers', [])
 	$scope.showButton = false;
 	$scope.user = {};
 	$scope.error = {};
+	$scope.friends = [];
 	if(true)
 		$scope.showButton = true;
 
@@ -468,6 +511,7 @@ angular.module('ionicParseApp.controllers', [])
 		user.set("username", $scope.user.username);
 		user.set("password", $scope.user.password);
 		user.set("email", $scope.user.email);
+		user.set("friends", $scope.friends)
 
 		user.signUp(null, {
 			success: function(user) {
