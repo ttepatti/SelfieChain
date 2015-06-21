@@ -122,6 +122,7 @@ angular.module('ionicParseApp.controllers', [])
 						requestObject.set("userFromid", Parse.User.current())
 						requestObject.set("userTo", $scope.user.userSearched)
 						requestObject.set("userToId", friend[0].id)
+						requestObject.set("valid", true);
 
 
 						requestObject.save(null, {
@@ -178,7 +179,7 @@ angular.module('ionicParseApp.controllers', [])
 		$scope.acceptFriend = function(){
 			var currentUser = Parse.User.current();
 			var currentUserName = currentUser.get("username")
-			
+
 			//We need to get the other person in the request
 			var requests = Parse.Object.extend("FriendRequest");
 			var getRequestQuery = new Parse.Query(requests);
@@ -189,8 +190,9 @@ angular.module('ionicParseApp.controllers', [])
 					console.log("Accepting request id " + results[0].id)
 					var userFromName = results[0].get("userFrom")
 					var userFromid = results[0].get("userFromid")
-					
+
 					results[0].set("status", "accepted")
+					results[0].set("valid", false)
 					results[0].save()
 				}
 			});
@@ -198,7 +200,7 @@ angular.module('ionicParseApp.controllers', [])
 		$scope.rejectFriend = function(){ //Violates DRY atm but idk
 			var currentUser = Parse.User.current();
 			var currentUserName = currentUser.get("username")
-			
+
 			//We need to get the other person in the request
 			var requests = Parse.Object.extend("FriendRequest");
 			var getRequestQuery = new Parse.Query(requests);
@@ -209,8 +211,9 @@ angular.module('ionicParseApp.controllers', [])
 					console.log("Rejecting request id " + results[0].id)
 					var userFromName = results[0].get("userFrom")
 					var userFromid = results[0].get("userFromid")
-					
+
 					results[0].set("status", "rejected") //<-- the only changed line from above
+					results[0].set("valid", false)
 					results[0].save()
 				}
 			});
