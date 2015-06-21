@@ -153,6 +153,7 @@ angular.module('ionicParseApp.controllers', [])
 			});
 		}
 
+
 		var mRequests = Parse.Object.extend("FriendRequest");
 		var requests = new Parse.Query(mRequests);
 		requests.equalTo("userTo", Parse.User.current().get('username'));
@@ -163,7 +164,7 @@ angular.module('ionicParseApp.controllers', [])
 					if(results[i].attributes.status != "accepted" && results[i].attributes.status != "rejected") {
 						$scope.list = results[i]
 						$scope.friendsrequest.push($scope.list)
-						//console.dir($scope.friendsrequest)
+						$scope.$broadcast('scroll.refreshComplete');
 					}
 				}
 			},
@@ -171,6 +172,24 @@ angular.module('ionicParseApp.controllers', [])
 				alert("Error: " + error.code + " " + error.message);
 			}
 		});
+		$scope.doRefresh = function() {
+			requests.equalTo("userTo", Parse.User.current().get('username'));
+			requests.find({
+				success: function(results) {
+					for(var i = 0; i<results.length; i++){
+						if(results[i].attributes.status != "accepted" && results[i].attributes.status != "rejected") {
+							$scope.list = results[i]
+							$scope.friendsrequest.push($scope.list)
+							alert("hello")
+						}
+					}
+					$scope.$broadcast('scroll.refreshComplete');
+				},
+				error: function(error) {
+					alert("Error: " + error.code + " " + error.message);
+				}
+			});
+		}
 	}
 })
 
@@ -194,6 +213,14 @@ angular.module('ionicParseApp.controllers', [])
 					results[0].set("status", "accepted")
 					results[0].set("valid", false)
 					results[0].save()
+					$ionicHistory.clearCache()
+					$ionicHistory.nextViewOptions({
+						disableBack: true
+					});
+					$state.go('app.friend', {
+						clear: true,
+						reload: true
+					});
 				}
 			});
 		}
@@ -216,6 +243,14 @@ angular.module('ionicParseApp.controllers', [])
 					results[0].set("valid", false)
 					results[0].save()
 				}
+			});
+			$ionicHistory.clearCache()
+			$ionicHistory.nextViewOptions({
+				disableBack: true
+			});
+			$state.go('app.friend', {
+				clear: true,
+				reload: true
 			});
 		}
 	}
@@ -300,7 +335,6 @@ angular.module('ionicParseApp.controllers', [])
 				if (friend.length === 0) {
 					$scope.lonelyText = "Looks a little lonely in here... Why not try sending a selfie to someone?"
 				}
-				console.dir(friend)
 				$scope.pictureRecieveds = friend
 			},
 			error: function (error) {
@@ -308,6 +342,7 @@ angular.module('ionicParseApp.controllers', [])
 			}
 		});
 		$scope.doRefresh = function() {
+
 			userQuery.equalTo("nextuser", Parse.User.current().get('username'));
 			userQuery.find({
 				success: function (friend) {
@@ -337,6 +372,9 @@ angular.module('ionicParseApp.controllers', [])
 			success: function (EachPic) {
 				//alert(friend.id)
 				//console.dir(EachPic[0].attributes)
+				$scope.chain = EachPic[0].attributes.chain
+				$scope.currentcount = EachPic[0].attributes.currenchaincount
+
 				$scope.PicArray = EachPic[0].attributes.image64;
 				//console.dir($scope.love.length)
 				//console.dir($scope.lengthofPicArray)

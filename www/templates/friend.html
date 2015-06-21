@@ -1,16 +1,22 @@
 <ion-view title="Selfie Chain" right-buttons="rightButtons" >
     <ion-content has-header="true" has-tabs="true" padding="true" ng-controller="FriendController">
 		Enter a username here to add them as a friend
+    <ion-refresher
+      pulling-text="Pull to refresh..."
+      on-refresh="doRefresh()">
+    </ion-refresher>
 		<br /><br />
         <label class="item item-input">
           <input type="text" ng-model="user.userSearched" placeholder="Username">
         </label>
 		<br />
-        <button class="button" ng-click="sendInfo()">Send</button>
+    <div style="text-align:center;">
+        <button class="button button-positive" ng-click="sendInfo()">Send Request</button>
+    </div>
     </br>
     </br>
         <ion-list>
-          <div class="item item-divider">
+          <div class="item item-divider" style="text-align:center;">
             Friend Requests
           </div>
           <div>
