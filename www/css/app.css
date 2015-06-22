@@ -76,3 +76,51 @@ a:hover {
   height: 24px;
   border-width: 1px;
 }
+.ion-input-select--large,
+.ion-input-select,
+select {
+  text-align: center;
+  -webkit-appearance:none;
+  background-repeat: no-repeat;
+  background-color: rgba(0,0,0,0);
+  border:thin solid #dddddd;
+  font-weight:300;
+  display:inline;
+  vertical-align:middle;
+  color:#333;
+  padding: auto 0;
+  overflow:hidden;
+  box-sizing:border-box;
+
+}
+
+.ion-input-select--large {
+  text-align: center;
+  width:320px;
+  font-size:1rem;
+  background-image: url(http://i.imgur.com/7rGM4IX.png);
+  text-indent:40px;
+  padding:1rem 0;
+}
+
+.ion-input-select {
+  text-align: center;
+  width:210px;
+  font-size:1rem;
+  background-image: url(http://i.imgur.com/nA9xx1X.png);
+  text-indent:20px;
+  padding:.5rem 0;
+}
+
+option {
+  text-align: center;
+  background:#fff;
+}
+
+select::-ms-expand {
+    display: none;
+}
+
+:focus {
+  outline:none;
+}

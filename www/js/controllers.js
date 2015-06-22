@@ -8,6 +8,7 @@ angular.module('ionicParseApp.controllers', [])
 
 	$scope.logout = function() {
 		Parse.User.logOut();
+		$ionicHistory.clearCache()
 		$rootScope.user = null;
 		$rootScope.isLoggedIn = false;
 		$rootScope.imgURI = undefined;
@@ -91,6 +92,7 @@ angular.module('ionicParseApp.controllers', [])
 			$state.go('app.home', {
 				clear: true
 			});
+			$ionicHistory.clearCache()
 		}
 	}
 })
@@ -127,23 +129,20 @@ angular.module('ionicParseApp.controllers', [])
 
 						requestObject.save(null, {
 							success: function(friendRequest) {
-								//alert("Saved");
+
 							},
 							error: function(friendRequest, error) {
-								// Execute any logic that should take place if the save fails.
-								// error is a Parse.Error with an error code and message.
-								alert('Failed save with error: ' + error.message);
 							}
 						});
-						alert("Request sent!");
+						$scope.message = "Request sent!"
 					} else if (friend.length == 0){
-						alert("User not found");
+						$scope.message = "User not found"
 					} else {
-						alert("Cannot send request to self");
+						$scope.message = "Cannot send request to self"
 					}
 				},
 				error: function (error) {
-					alert('Failed with error: ' + error.message);
+
 				}
 			});
 
@@ -159,7 +158,7 @@ angular.module('ionicParseApp.controllers', [])
 		requests.equalTo("userTo", Parse.User.current().get('username'));
 		requests.find({
 			success: function(results) {
-				//alert(results.length + " requests")
+
 				for(var i = 0; i<results.length; i++){
 					if(results[i].attributes.status != "accepted" && results[i].attributes.status != "rejected") {
 						$scope.list = results[i]
@@ -169,7 +168,7 @@ angular.module('ionicParseApp.controllers', [])
 				}
 			},
 			error: function(error) {
-				alert("Error: " + error.code + " " + error.message);
+
 			}
 		});
 		$scope.doRefresh = function() {
@@ -180,13 +179,13 @@ angular.module('ionicParseApp.controllers', [])
 						if(results[i].attributes.status != "accepted" && results[i].attributes.status != "rejected") {
 							$scope.list = results[i]
 							$scope.friendsrequest.push($scope.list)
-							alert("hello")
+
 						}
 					}
 					$scope.$broadcast('scroll.refreshComplete');
 				},
 				error: function(error) {
-					alert("Error: " + error.code + " " + error.message);
+
 				}
 			});
 		}
@@ -370,8 +369,6 @@ angular.module('ionicParseApp.controllers', [])
 		queryThatPic.equalTo("objectId", $scope.titleOfPic)
 		queryThatPic.find({
 			success: function (EachPic) {
-				//alert(friend.id)
-				//console.dir(EachPic[0].attributes)
 				$scope.chain = EachPic[0].attributes.chain
 				$scope.currentcount = EachPic[0].attributes.currenchaincount
 
@@ -425,7 +422,8 @@ angular.module('ionicParseApp.controllers', [])
 					$ionicHistory.nextViewOptions({
 						disableBack: true
 					});
-					$state.go('app.requests', {
+					$ionicHistory.clearCache()
+					$state.go('app.home', {
 						clear: true
 					});
 				},
@@ -440,6 +438,8 @@ angular.module('ionicParseApp.controllers', [])
 .controller('HomeController', function($scope, $state, $rootScope) {
 	if (!$rootScope.isLoggedIn) {
 		$state.go('welcome');
+	}else{
+		$state.go($state.current, {}, {reload: true});
 	}
 })
 

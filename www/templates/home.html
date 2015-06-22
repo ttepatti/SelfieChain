@@ -5,11 +5,11 @@
           pulling-text="Pull to refresh..."
           on-refresh="doRefresh()">
         </ion-refresher>
-		    <p style="text-align: center">{{lonelyText}}</p>
         <ion-list>
           <div class="item item-divider">
             Selfie Chain Requests
           </div>
+          <p style="text-align: center">{{lonelyText}}</p>
           <div>
             <a ng-repeat="pictureRecieved in pictureRecieveds" href="#/app/view/{{pictureRecieved.id}}" class="item">
               <h2>{{pictureRecieved.get('name')}}</h2>
