@@ -4423,7 +4423,7 @@ a.item {
   color: inherit;
   text-decoration: none; }
   a.item:hover, a.item:focus {
-    text-decoration: none; background-color:#000033;color:white; }
+    text-decoration: none; color:white; }
 
 /**
  * Complex Items
