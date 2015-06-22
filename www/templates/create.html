@@ -8,17 +8,13 @@
     <div id="centPic"><img ng-show="imgURI === undefined" ng-src="http://placehold.it/300x300"></div>
     </br>
     </br>
-    <button class="button" ng-click="takePicture()">Take Picture</button>
+    <div style = "text-align: center;"><button class="button button-positive" ng-click="takePicture()">Take Picture</button></div>
     </br>
     </br>
     <label class="item item-input">
       <input type="number" ng-model="user.chainLength" placeholder="length">
     </label>
     </br>
-    <label class="item item-input">
-      <input type="text" ng-model="user.usertosendto" placeholder="next user">
-    </label>
-    </br>
-    <button class="button" ng-click="sendData()">Send</button>
+    <div style = "text-align: center;"><button class="button button-positive" ng-click="sendData()">Send</button></div>
   </ion-content>
 </ion-view>

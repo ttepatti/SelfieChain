@@ -36,7 +36,7 @@ angular.module('ionicParseApp.controllers', [])
 	}
 })
 
-.controller('CreaterController', function($scope, $state, $rootScope, $cordovaCamera, $ionicHistory ) {
+.controller('CreaterController', function($scope, $state, $stateParams, $rootScope, $cordovaCamera, $ionicHistory ) {
 	$scope.userscontrib = [];
 	$scope.imageArray = [];
 	$scope.imgURI = undefined;
@@ -74,7 +74,7 @@ angular.module('ionicParseApp.controllers', [])
 			picture.set("username", Parse.User.current())
 			picture.set("image64", $scope.imageArray)
 			picture.set("chain", $scope.user.chainLength)
-			picture.set("nextuser", $scope.user.usertosendto)
+			picture.set("nextuser", $stateParams.createid)
 			picture.set("UsersContributed", teststuff)
 			picture.save(null, {
 				success: function(picture) {
@@ -615,4 +615,36 @@ angular.module('ionicParseApp.controllers', [])
 	$scope.toggleMenu = function() {
 		$scope.sideMenuController.toggleRight();
 	};
+})
+
+.controller('LoadFriendsController', function($scope, $state, $rootScope, $stateParams, $ionicHistory){
+	$scope.friendsList = [];
+	var FriendRequest = Parse.Object.extend("FriendRequest")
+	var friendRequestFrom = new Parse.Query(FriendRequest);
+	var friendRequestTo = new Parse.Query(FriendRequest);
+	friendRequestFrom.equalTo("userFrom", Parse.User.current().get("username"))
+	friendRequestFrom.find({
+		success: function(results){
+			for(var i = 0; i<results.length;i++){
+				if(results[i].attributes.status === "accepted"){
+					var value = results[i].attributes.userTo
+					$scope.friendsList.push(value);
+					console.dir($scope.friendsList)
+				}
+			}
+		}
+	});
+	friendRequestTo.equalTo("userTo", Parse.User.current().get("username"))
+	friendRequestTo.find({
+		success: function(results){
+			for(var i = 0; i<results.length;i++){
+				if(results[i].attributes.status === "accepted"){
+					var value = results[i].attributes.userFrom
+					$scope.friendsList.push(value);
+					console.dir($scope.friendsList)
+				}
+			}
+		}
+	});
+
 })

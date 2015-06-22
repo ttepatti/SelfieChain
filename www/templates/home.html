@@ -18,5 +18,16 @@
             </a>
           </div>
         </ion-list>
+        <ion-list ng-controller="LoadFriendsController">
+          <div class="item item-divider">
+            Friends List
+          </div>
+          <div>
+            <a ng-repeat="friend in friendsList track by $index" href="#/app/create/{{friend}}" class="item">
+              <h2>{{friend}}</h2>
+            </a>
+          </div>
+        </ion-list>
     </ion-content>
+
 </ion-view>

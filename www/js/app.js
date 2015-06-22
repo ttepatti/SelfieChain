@@ -50,7 +50,7 @@ angular.module('ionicParseApp',
             })
 
             .state('app.create', {
-                url: '/create',
+                url: '/create/:createid',
                 views: {
                     'menuContent': {
                         templateUrl: 'templates/create.html',
