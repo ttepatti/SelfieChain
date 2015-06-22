@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.katanastabstudios.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>StarterApp</name>
+<widget id="com.shangystudios.selfie" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Selfie Chain</name>
     <description>
-        A sample Ionic Framework app using Cordova and AngularJS with user integration with Parse.
+        Selfie Chain
     </description>
-    <author email="alan.levicki@katanastabstudios.com" href="http://www.katanastabstudios.com/">
-        Alan Levicki
+    <author email="chaitudandu@gmail.com" href="http://http://cdandu16.github.io">
+        Chaitu Dandu
     </author>
     <content src="index.html" />
     <access origin="*" />
